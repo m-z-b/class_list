@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'class_list'
+
+ClassList.new.process( *ARGV ).print_all
