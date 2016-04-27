@@ -1,6 +1,8 @@
 # ClassList
 
-Scan a set of Ruby files and print out any classes declared and their hierarchy.
+When analyzing an unfamiliar project, it can be useful to have a class hierarchy to hand. 
+
+Classlist scans a set of Ruby files and prints out any classes declared with their hierarchy.
 
 Note. This is a quick and dirty syntactic scan which does NOT take account of any module declarations or nested classes.
 

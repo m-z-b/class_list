@@ -50,13 +50,16 @@ private
 
   # Process all '.rb. files and any subcirectories
   def process_dir( dir )
+    #puts "Scanning #{dir}"
     Dir.foreach( dir ) do |entry|
-      if entry.start_with?( '.' )
-        # Skip it
-      elsif Dir.exist?(entry)
-        process_dir("#{dir}/#{entry}")
+      if entry.start_with?('.')
+        next
+      end
+      path = "#{dir}/#{entry}"
+      if Dir.exist?(path)
+        process_dir(path)
       elsif entry.end_with?( '.rb' )
-        process_file( "#{dir}/#{entry}" )
+        process_file( path )
       end
     end
   end
