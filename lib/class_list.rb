@@ -1,7 +1,6 @@
 require "class_list/version"
 require 'set'
 
-
 class ClassList
 
   # Match a class A < B type declaration
@@ -14,33 +13,76 @@ class ClassList
     @children = Hash.new{ |h,k| h[k] = Set.new }
   end
 
-  def process( *files )
-    files.each do |file|
-      #puts "Scanning #{file}"
-      File.open(file,'r') do |f|
-        f.each_line do |line|
-          m = CHILD_CLASS_DECLARATION.match( line ) 
-          unless m.nil?
-            #puts "#{m[1]} -> #{m[2]}"
-            @children[m[2]].add(m[1])
-            @child.add(m[1])
-            next
-          end
-          m = /class\s+([A-Z][A-Za-z0-9]*)/.match(line)
-          unless m.nil?
-            #puts "#{m[1]}"
-            @children[m[1]] = Set.new
-            next
-          end
-        end
+  # Arguments may be files or directories
+  def process( *args )
+    if args.count == 0
+      $stderr.puts "ClassList V#{VERSION} - crudely find all the Ruby classes defined in a set of files or directories"
+      $stderr.puts 
+      $stderr.puts "    Usage: classlist file1.rb file2.rb dir1 dir2 ..."
+      exit 1
+    end
+    args.each do |arg|
+      if Dir.exist?(arg)
+        process_dir(arg)
+      elsif File.exist?(arg)
+        process_file(arg)
+      else
+        $stderr.puts "Path #{arg} does not found"
+        exit 1
       end
     end
     self
   end
 
+
+  def print_all
+    puts "Class                Children"
+    puts "-------------------------------------------"
+    print( 0, @children.keys.select{|c| !@child.member?(c)}.sort )
+  end
+
+private
+
   def is_parent?( klass )
     @children.has_key?( klass )
   end
+
+
+  # Process all '.rb. files and any subcirectories
+  def process_dir( dir )
+    Dir.foreach( dir ) do |entry|
+      if entry.start_with?( '.' )
+        # Skip it
+      elsif Dir.exist?(entry) && !entry.start
+        process_dir("#{dir}/#{entry}")
+      elsif entry.end_with?( '.rb' )
+        process_file( "#{dir}/#{entry}" )
+      end
+    end
+  end
+
+  # Process a single file
+  def process_file( file )
+    puts "Scanning #{file}"
+    File.open(file,'r') do |f|
+      f.each_line do |line|
+        m = CHILD_CLASS_DECLARATION.match( line ) 
+        if m
+          #puts "#{m[1]} -> #{m[2]}"
+          @children[m[2]].add(m[1])
+          @child.add(m[1])
+          next
+        end
+        m = SIMPLE_CLASS_DECLARATION.match(line)
+        if m
+          #puts "#{m[1]}"
+          @children[m[1]] = Set.new
+          next
+        end
+      end
+    end
+  end
+
 
   def print( level, enum )
     enum.each do |k|
@@ -51,14 +93,7 @@ class ClassList
     end
   end
 
-  def print_all
-    puts "Class                Children"
-    puts "-------------------------------------------"
-    print( 0, @children.keys.select{|c| !@child.member?(c)}.sort )
-  end
 
 end
 
 
-
-end
