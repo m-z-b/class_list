@@ -53,7 +53,7 @@ private
     Dir.foreach( dir ) do |entry|
       if entry.start_with?( '.' )
         # Skip it
-      elsif Dir.exist?(entry) && !entry.start
+      elsif Dir.exist?(entry)
         process_dir("#{dir}/#{entry}")
       elsif entry.end_with?( '.rb' )
         process_file( "#{dir}/#{entry}" )
@@ -63,7 +63,7 @@ private
 
   # Process a single file
   def process_file( file )
-    puts "Scanning #{file}"
+    #puts "Scanning #{file}"
     File.open(file,'r') do |f|
       f.each_line do |line|
         m = CHILD_CLASS_DECLARATION.match( line ) 
