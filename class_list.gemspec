@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Print a cruide class list for a set of ruby files"
   spec.description   = "Print a cruide class list for a set of ruby ls-files"
-  spec.homepage      = "http://www.albionresearch.com/gem/class_list"
+  spec.homepage      = "https://github.com/m-z-b/class_list"
   spec.licenses      = ['MIT']
 
 
