@@ -2,7 +2,7 @@
 
 When analyzing an unfamiliar project, it can be useful to have a class hierarchy to hand. 
 
-Classlist scans a set of Ruby files and prints out any classes declared with their hierarchy.
+Classlist is a command line gem which scans a set of Ruby files and prints out any classes declared along with their hierarchy.
 
 Note. This is a quick and dirty syntactic scan which does NOT take account of any module declarations or nested classes.
 
@@ -18,7 +18,23 @@ Or it as:
 
 ## Usage
 
-$ class_list file1.rb file2.rb ...
+    $ classlist file1.rb dir1.rb .
+    Class                Children
+    -------------------------------------------
+    Animal
+        Bird
+            Hawk
+            Parrot
+        Mammal
+            Monkey
+            Zebra
+    Mineral
+        Bauxite
+        Calcite
+    Vegetable
+        Carrot
+        Potato
+
 
 ## Development
 
@@ -28,5 +44,5 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/class_list.
+Bug reports and pull requests are welcome on GitHub at https://github.com/m-z-b/class_list.
 
